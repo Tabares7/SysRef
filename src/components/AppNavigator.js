@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';  // Asegúrate de instalar esta librería
+import AntDesign from 'react-native-vector-icons/AntDesign'; // Importa el ícono correcto
 import LoginScreen from '../screens/LoginScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import { useEffect, useState } from 'react';
 import { getUser } from '../utils/authUtility';
-
 
 const Tab = createBottomTabNavigator();
 
@@ -17,41 +15,59 @@ function AppNavigator() {
   useEffect(() => {
     getUser().then((user) => {
       if (!user) {
-        
-      }else{
+        setLoading(false);
+      } else {
         setUser(user);
         setLoading(false);
       }
-
     });
-  });
+  }, []);
+
+  if (loading) {
+    return null; // Puedes mostrar un indicador de carga mientras se obtiene el usuario
+  }
+
   return (
     <Tab.Navigator
-      screnOptions={
-        ({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let iconColor = focused ? '#2d22de' : '#8e8e93';
+          let iconPadding = focused ? 10 : 5;
 
-            if (route.name === 'Dashboard') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Login') {
-              iconName = focused ? 'person' : 'person-outline';
-            }
+          if (route.name === 'Dashboard') {
+            iconName = 'home';
+          } else if (route.name === 'Login') {
+            iconName = 'user';
+          } else if (route.name === 'Register') {
+            iconName = 'adduser';
+          }
 
-            return <Icon name={iconName} size={size} color={color} />;
-          },
-        })
-      }
+          return (
+            <AntDesign
+              name={iconName}
+              size={size}
+              color={iconColor}
+              style={{ padding: iconPadding }}
+            />
+          );
+        },
+        tabBarActiveTintColor: '#2d22de',
+        tabBarInactiveTintColor: '#8e8e93',
+        tabBarStyle: {
+          height: 100, // Ajusta la altura de la barra de pestañas
+          // paddingBottom: 20, // Ajusta el padding inferior
+          paddingTop: 10, // Ajusta el padding superior
+        },
+        tabBarLabelStyle: {
+          marginTop: 0,
+          fontSize: 16, // Ajusta el tamaño de la etiqueta
+        },
+      })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} options={
-        {
-          title: user ? user : 'Bienvenido',
-        }
-      
-      } />
-      <Tab.Screen name="Login" component={LoginScreen} />
-      <Tab.Screen name="Register" component={RegisterScreen} />
-
+      <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Home" }} />
+      <Tab.Screen name="Login" component={LoginScreen} options={{ title: "Login" }}/>
+      <Tab.Screen name="Register" component={RegisterScreen} options={{ title: "Register" }}/>
     </Tab.Navigator>
   );
 }
