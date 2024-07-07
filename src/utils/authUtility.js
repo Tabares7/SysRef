@@ -46,7 +46,7 @@ export const saveUser = async (user) => {
     }
 }
 
-export const getUser = async () => {
+export const getUser = async (request) => {
     try {
         const user = await AsyncStorage.getItem('user');
         const id = JSON.parse(user);
@@ -59,8 +59,10 @@ export const getUser = async () => {
         });
         const data = await clinic.json();
         if (clinic.ok){
-            console.log('Clinic data', data);
-            return data.clinic.name;
+            console.log(data)
+            if (request === 'id') return data.clinic.id;
+            console.log("id=", data.clinic.id );
+            if (request === 'name') return data.clinic.name;
         }
 
 

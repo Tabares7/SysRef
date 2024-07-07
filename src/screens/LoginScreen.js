@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator } from 'react-native';
-import { storeToken,  saveUser} from '../utils/authUtility';
+import { useAuth } from '../context/AuthContext';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const { storeToken, storeClinicId } = useAuth();  // Usamos storeClinicId en lugar de setClinicId
+
+   
 
     const handleLogin = async () => {
         setLoading(true);
@@ -23,12 +26,12 @@ const LoginScreen = ({ navigation }) => {
             setLoading(false);
             if (response.ok) {
                 console.log('Login successful', data);
-                if (data.token) {
+                if (data.token && data.id) {  // Asegúrate de que el backend envíe clinicId junto con el token
                     await storeToken(data.token);
-                    await saveUser(data.id);
+                    await storeClinicId(data.id);  // Guarda el clinicId usando el método adecuado
                     navigation.navigate('Dashboard');
                 } else {
-                    setError('Login failed: Token not received');
+                    setError('Login failed: Token or Clinic ID not received');
                 }
             } else {
                 setError('Login failed: ' + data.message);
@@ -67,10 +70,13 @@ const LoginScreen = ({ navigation }) => {
     );
 };
 
+export default LoginScreen;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
     },
     title: {
@@ -79,16 +85,15 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     input: {
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        height: 40,
-        borderColor: 'gray',
+        width: '100%',
+        padding: 10,
+        marginBottom: 20,
         borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
     },
     error: {
         color: 'red',
-        marginBottom: 10,
+        marginBottom: 20,
     },
 });
-
-export default LoginScreen;

@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'; // Importa el ícon
 import LoginScreen from '../screens/LoginScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import PatientsScreen from '../screens/PatientsScreen';
 import { getUser } from '../utils/authUtility';
 
 const Tab = createBottomTabNavigator();
@@ -13,7 +14,7 @@ function AppNavigator() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUser().then((user) => {
+    getUser("name").then((user) => {
       if (!user) {
         setLoading(false);
       } else {
@@ -41,6 +42,8 @@ function AppNavigator() {
             iconName = 'user';
           } else if (route.name === 'Register') {
             iconName = 'adduser';
+          } else if (route.name === 'Patients') {
+            iconName = 'team';
           }
 
           return (
@@ -66,6 +69,7 @@ function AppNavigator() {
       })}
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Home" }} />
+      <Tab.Screen name="Patients" component={PatientsScreen} options={{ title: "Patients" }}/>
       <Tab.Screen name="Login" component={LoginScreen} options={{ title: "Login" }}/>
       <Tab.Screen name="Register" component={RegisterScreen} options={{ title: "Register" }}/>
     </Tab.Navigator>
