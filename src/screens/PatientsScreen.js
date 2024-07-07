@@ -19,7 +19,7 @@ const PatientsScreen = () => {
                         console.error('Expected an array of patients, but got:', data);
                         setPatients([]);  // Set to an empty array if the expected array is not received
                     }
-                })
+                }) 
                 .catch(error => {
                     console.error("Error fetching patients:", error);
                     setPatients([]);  // Ensure to clear patients in case of error
@@ -29,7 +29,7 @@ const PatientsScreen = () => {
 
     return (
         <View>
-            <Text>Clinic ID: {clinicId || "No disponible"}</Text>
+            <Text>Clinic ID: {clinicId || "No disponible :("}</Text>
             {patients.map(patient => (
                 <Text key={patient.id}>{patient.name}</Text>
             ))}
