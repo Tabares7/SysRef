@@ -1,25 +1,16 @@
 // screens/DashboardScreen.js
 import React, { useEffect , useState} from 'react';
 import { View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import { Button } from 'tamagui'
+import { StacksDemo } from '../components/StackDemo';
 
 const DashboardScreen = ({navigation}) => {
 
 
   return (
     <View style={styles.container} >
-      <Text style={styles.title}>Dashboard Screen</Text>
-      <View style={styles.section}>
-      <View style={styles.card}>
-      <Text style={styles.subtitle}>Bienvenido a la pantalla de inicio</Text>
-      </View>
-      <View style={styles.card}>
-      <Text style={styles.subtitle}>Bienvenido la pantalla de inicio</Text>
-      </View>
-      </View>
-      {/* <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      /> */}
+      
+      
     </View>
   );
 };
