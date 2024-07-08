@@ -1,40 +1,63 @@
+// PatientsScreen.js
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
-import { useAuth } from "../context/AuthContext";  // Importa el hook de contexto
+import {
+  View,
+  Text,
+  StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+} from "react-native";
+import { useAuth } from "../context/AuthContext";
 import usePatient from "../hooks/usePatient";
+import PacienteItem from "../components/PacienteItem";
 
 const PatientsScreen = () => {
-    const { clinicId, token } = useAuth();
-    const { getPatients } = usePatient();
-    const [patients, setPatients] = useState([]);  // Ensure the initial state is an array
+  const { clinicId, token } = useAuth();
+  const { getPatients } = usePatient();
+  const [patients, setPatients] = useState([]);
 
-    useEffect(() => {
-        if (clinicId) {
-            getPatients(clinicId)
-                .then(data => {
-                    // Check if data.patients is an array and set it to the state
-                    if (data && Array.isArray(data.patients)) {
-                        setPatients(data.patients);
-                    } else {
-                        console.error('Expected an array of patients, but got:', data);
-                        setPatients([]);  // Set to an empty array if the expected array is not received
-                    }
-                }) 
-                .catch(error => {
-                    console.error("Error fetching patients:", error);
-                    setPatients([]);  // Ensure to clear patients in case of error
-                });
-        }
-    }, [clinicId, getPatients]);
+  useEffect(() => {
+    if (clinicId) {
+      getPatients(clinicId)
+        .then((data) => {
+          if (data && Array.isArray(data.patients)) {
+            setPatients(data.patients);
+          } else {
+            console.error("Expected an array of patients, but got:", data);
+            setPatients([]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching patients:", error);
+          setPatients([]);
+        });
+    }
+  }, [clinicId, getPatients]);
 
-    return (
-        <View>
-            <Text>Clinic ID: {clinicId || "No disponible :("}</Text>
-            {patients.map(patient => (
-                <Text key={patient.id}>{patient.name}</Text>
-            ))}
-        </View>
-    );
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={patients}
+        renderItem={({ item }) => <PacienteItem paciente={item} />}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
+      />
+    </SafeAreaView>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+    padding: 20,
+    backgroundColor: "#f5f5f5", // Fondo claro para mejor contraste
+  },
+  listContainer: {
+    paddingBottom: 20, // Espacio adicional en la parte inferior
+    padding: 20,
+  },
+});
 
 export default PatientsScreen;

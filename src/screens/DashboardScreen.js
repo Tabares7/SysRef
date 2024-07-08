@@ -1,16 +1,14 @@
 // screens/DashboardScreen.js
-import React, { useEffect , useState} from 'react';
-import { View, Text, ActivityIndicator, StyleSheet} from 'react-native';
-import { Button } from 'tamagui'
-import { StacksDemo } from '../components/StackDemo';
+import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { Button } from "tamagui";
+import { StacksDemo } from "../components/StackDemo";
+import ClearCacheButton from "../components/ClearCacheButton";
 
-const DashboardScreen = ({navigation}) => {
-
-
+const DashboardScreen = ({ navigation }) => {
   return (
-    <View style={styles.container} >
-      
-      
+    <View style={styles.container}>
+      <ClearCacheButton />
     </View>
   );
 };
@@ -18,45 +16,44 @@ const DashboardScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'start',
+    justifyContent: "start",
     padding: 20,
   },
-  section:{
+  section: {
     flex: 1,
-    flexDirection: 'row',
-    gap:10
+    flexDirection: "row",
+    gap: 10,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    color: "blue" 
+    color: "blue",
   },
-  subtitle:{
+  subtitle: {
     color: "white",
-    fontSize:18,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: "bold",
   },
   input: {
     marginBottom: 10,
     paddingHorizontal: 10,
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
   },
   error: {
-    color: 'red',
+    color: "red",
     marginBottom: 10,
   },
-  card:{
-    backgroundColor: '#2d22de',
+  card: {
+    backgroundColor: "#2d22de",
     padding: 10,
     borderRadius: 10,
     elevation: 5,
-    height:150,
-    width: 150
-  }
+    height: 150,
+    width: 150,
+  },
 });
-
 
 export default DashboardScreen;
