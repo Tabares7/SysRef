@@ -1,20 +1,7 @@
-// PacienteItem.js
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { ChevronRight, Cloud, Moon, Star, Sun } from "@tamagui/lucide-icons";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
-import {
-  Card,
-  H3,
-  Paragraph,
-  XStack,
-  YStack,
-  styled,
-  Separator,
-  ListItem,
-} from "tamagui";
-import { Pressable } from "react-native";
+import { Card, XStack, YStack, Separator, styled } from "tamagui";
 
 // Estiliza los elementos del paciente
 const StyledCard = styled(Card, {
@@ -27,12 +14,12 @@ const StyledCard = styled(Card, {
   borderColor: "#ddd",
 });
 
-const InfoText = styled(Paragraph, {
+const InfoText = styled(Text, {
   color: "#555",
   fontSize: 16,
 });
 
-const LabelText = styled(Paragraph, {
+const LabelText = styled(Text, {
   fontWeight: "bold",
   color: "#2d22de",
   fontSize: 16,
@@ -41,16 +28,14 @@ const LabelText = styled(Paragraph, {
 const PacienteItem = ({ paciente }) => {
   const navigation = useNavigation();
   return (
-    <Pressable
-      onPress={(e) => {
+    <TouchableOpacity
+      onPress={() => {
         navigation.navigate("Dashboard");
       }}
     >
       <StyledCard>
-        <YStack padding="$2">
-          <Text style={styles.title} color="#2d22de" fontSize={20}>
-            {paciente.name}
-          </Text>
+        <YStack padding="$1">
+          <Text style={styles.name}>{paciente.name}</Text>
           <Separator marginVertical={10} />
           <XStack space="$4" marginVertical="$2">
             <LabelText>Email:</LabelText>
@@ -66,23 +51,15 @@ const PacienteItem = ({ paciente }) => {
           </XStack>
         </YStack>
       </StyledCard>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f5f5f5", // Fondo claro para mejor contraste
-  },
-  listContainer: {
-    paddingBottom: 20, // Espacio adicional en la parte inferior
-  },
-  title: {
-    fontSize: 24,
+  name: {
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "#2d22de",
   },
 });
 

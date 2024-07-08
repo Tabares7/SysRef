@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import AntDesign from "react-native-vector-icons/AntDesign"; // Importa el ícono correcto
+import { createStackNavigator } from "@react-navigation/stack";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import LoginScreen from "../screens/LoginScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import PatientsScreen from "../screens/PatientsScreen";
-import { getUser } from "../utils/authUtility";
 import { useAuth } from "../context/AuthContext"; // Importa el contexto de autenticación
+import AddPatientScreen from "../screens/AddPatientScreen";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-function AppNavigator() {
-  const { token, loading } = useAuth(); // Obtén el token y el estado de carga del contexto
+function TabNavigator() {
+  const { token, loading } = useAuth();
 
   if (loading) {
     return null; // Puedes mostrar un indicador de carga mientras se obtienen los datos de autenticación
@@ -47,16 +49,16 @@ function AppNavigator() {
         tabBarActiveTintColor: "#2d22de",
         tabBarInactiveTintColor: "#8e8e93",
         tabBarStyle: {
-          height: 100, // Ajusta la altura de la barra de pestañas
-          paddingTop: 10, // Ajusta el padding superior
+          height: 100,
+          paddingTop: 10,
         },
         tabBarLabelStyle: {
           marginTop: 0,
-          fontSize: 16, // Ajusta el tamaño de la etiqueta
+          fontSize: 16,
         },
       })}
     >
-      {loading ? (
+      {token ? (
         <>
           <Tab.Screen
             name="Dashboard"
@@ -84,6 +86,23 @@ function AppNavigator() {
         </>
       )}
     </Tab.Navigator>
+  );
+}
+
+function AppNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Back"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AddPatient"
+        component={AddPatientScreen}
+        options={{ title: "Add New Patient" }}
+      />
+    </Stack.Navigator>
   );
 }
 

@@ -1,5 +1,4 @@
-// PatientsScreen.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,17 +6,20 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 const PatientsScreen = () => {
   const { clinicId, token } = useAuth();
   const { getPatients } = usePatient();
   const [patients, setPatients] = useState([]);
+  const navigation = useNavigation();
 
-  useEffect(() => {
+  const fetchPatients = useCallback(() => {
     if (clinicId) {
       getPatients(clinicId)
         .then((data) => {
@@ -35,6 +37,12 @@ const PatientsScreen = () => {
     }
   }, [clinicId, getPatients]);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchPatients();
+    }, [fetchPatients])
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -43,6 +51,14 @@ const PatientsScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          navigation.navigate("AddPatient", { onAdd: fetchPatients })
+        }
+      >
+        <Text style={styles.buttonText}>Add New Patient</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -50,13 +66,25 @@ const PatientsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    margin: 20,
     padding: 20,
     backgroundColor: "#f5f5f5", // Fondo claro para mejor contraste
   },
   listContainer: {
     paddingBottom: 20, // Espacio adicional en la parte inferior
-    padding: 20,
+  },
+  button: {
+    width: "100%",
+    paddingVertical: 15,
+    borderRadius: 5,
+    backgroundColor: "#2d22de",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
