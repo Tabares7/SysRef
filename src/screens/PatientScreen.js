@@ -34,7 +34,18 @@ const PatientScreen = () => {
       });
   }, []);
 
-  useEffect(() => {}, [referrals]);
+  useEffect(() => {
+    referrals.forEach((referral) => {
+      getPatientById(referral.referred_id)
+        .then((data) => {
+          setReferreds(data.patients);
+          console.log("Referred:", referreds);
+        })
+        .catch((error) => {
+          console.error("Error fetching referred:", error);
+        });
+    });
+  }, [referrals]);
 
   // const renderReferredPatient = ({ item }) => (
   //   <View style={styles.referredCard}>
@@ -83,7 +94,7 @@ const PatientScreen = () => {
         <Text style={styles.sectionTitle}>Referred Patients</Text>
         <Separator marginVertical={10} />
         <FlatList
-          data={referrals}
+          data={referreds}
           renderItem={({ item }) => <PacienteItem patient={item} />}
           keyExtractor={(item) => item.id}
         />

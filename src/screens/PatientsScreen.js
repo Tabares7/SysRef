@@ -50,12 +50,21 @@ const PatientsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={patients}
-        renderItem={({ item }) => <PacienteItem patient={item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-      />
+      {patients.length > 0 ? (
+        <FlatList
+          data={patients}
+          renderItem={({ item }) => <PacienteItem patient={item} />}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContainer}
+        />
+      ) : (
+        <View style={styles.empyData}>
+          <Text style={styles.title}>No patients found</Text>
+          <Text style={styles.subtitle}>
+            Add new patients to start working.
+          </Text>
+        </View>
+      )}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
@@ -77,6 +86,23 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingBottom: 20, // Espacio adicional en la parte inferior
+  },
+  empyData: {
+    flex: 1,
+    marginTop: 50,
+    fontSize: 20,
+    fontWeight: "bold",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: "row",
