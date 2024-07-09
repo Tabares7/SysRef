@@ -9,6 +9,7 @@ import PatientsScreen from "../screens/PatientsScreen";
 import { useAuth } from "../context/AuthContext"; // Importa el contexto de autenticación
 import AddPatientScreen from "../screens/AddPatientScreen";
 import PatientScreen from "../screens/PatientScreen";
+import AddReferredScreen from "../screens/AddReferredScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -107,6 +108,11 @@ function AppNavigator() {
         name="PatientDetails"
         component={PatientScreen}
         options={{ title: "Patient Details" }}
+      />
+      <Stack.Screen
+        name="AddReferred"
+        component={AddReferredScreen}
+        options={{ title: "Add Referred" }}
       />
     </Stack.Navigator>
   );

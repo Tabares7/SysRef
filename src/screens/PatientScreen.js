@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { Separator } from "tamagui";
+import { AntDesign } from "react-native-vector-icons";
+import { ButtonIcon, Separator } from "tamagui";
 import { useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useReferral from "../hooks/useReferral";
 import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
+import { useNavigation } from "@react-navigation/native";
 
 const PatientScreen = () => {
   const [referrals, setReferrals] = useState([]);
   const [referreds, setReferreds] = useState([]);
+
+  const navigator = useNavigation();
 
   const route = useRoute();
   const { patient } = route.params;
@@ -68,11 +72,19 @@ const PatientScreen = () => {
           Referral Code: {patient.referral_code}
         </Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Edit Profile</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              navigator.navigate("AddReferred", { referrer: patient.id });
+            }}
+          >
+            <Text style={styles.buttonText}>
+              <AntDesign name="plus" style={{ padding: 20 }} color="white" />
+              Refer a patient
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.buttonText}>Follow</Text>
+            <Text style={styles.buttonText}>Use rewards</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.statsContainer}>
