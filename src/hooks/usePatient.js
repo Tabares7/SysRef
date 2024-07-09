@@ -48,6 +48,28 @@ function usePatient() {
     }
   }, []);
 
+  const getPatientById = useCallback(async (patientId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}patients/${clinicId}/${patientId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to fetch patient");
+      }
+      return data;
+    } catch (error) {
+      console.error("Error fetching patient:", error);
+      throw error;
+    }
+  });
+
   // Función para actualizar un paciente
   const updatePatient = useCallback(async (patientId, patientData) => {
     try {
@@ -99,6 +121,7 @@ function usePatient() {
   return {
     addPatient,
     getPatients,
+    getPatientById,
     updatePatient,
     deletePatient,
   };

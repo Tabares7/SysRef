@@ -7,19 +7,21 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { Separator } from "tamagui";
 import { useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "../context/AuthContext";
 import useReferral from "../hooks/useReferral";
+import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
 
 const PatientScreen = () => {
   const [referrals, setReferrals] = useState([]);
+  const [referreds, setReferreds] = useState([]);
 
   const route = useRoute();
   const { patient } = route.params;
-  const { clinicId, token } = useAuth();
   const { getReferralsByReferrer } = useReferral();
+  const { getPatientById } = usePatient();
 
   useEffect(() => {
     getReferralsByReferrer(patient.id)
@@ -31,6 +33,8 @@ const PatientScreen = () => {
         console.error("Error fetching referrals:", error);
       });
   }, []);
+
+  useEffect(() => {}, [referrals]);
 
   // const renderReferredPatient = ({ item }) => (
   //   <View style={styles.referredCard}>
@@ -77,6 +81,7 @@ const PatientScreen = () => {
       </View>
       <View style={styles.body}>
         <Text style={styles.sectionTitle}>Referred Patients</Text>
+        <Separator marginVertical={10} />
         <FlatList
           data={referrals}
           renderItem={({ item }) => <PacienteItem patient={item} />}
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginBottom: 10,
+    marginBottom: 0,
   },
   name: {
     fontSize: 24,
@@ -163,8 +168,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
     marginBottom: 10,
   },
   referredCard: {
