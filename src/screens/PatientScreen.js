@@ -22,7 +22,7 @@ const PatientScreen = () => {
   const { getReferralsByReferrer } = useReferral();
 
   useEffect(() => {
-    getReferralsByReferrer(clinicId, token, patient.id)
+    getReferralsByReferrer(patient.id)
       .then((data) => {
         setReferrals(data.referrals);
         console.log("Referrals:", data.referrals);

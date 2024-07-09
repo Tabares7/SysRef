@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,38 +6,39 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
 import usePatient from "../hooks/usePatient";
 import { useNavigation } from "@react-navigation/native";
 
-const AddPatientScreen = ({ onSubmit }) => {
+const AddPatientScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  // const [referralCode, setReferralCode] = useState("");
   const [error, setError] = useState("");
   const { addPatient } = usePatient();
   const navigation = useNavigation();
 
+  useEffect(() => {
+    setError("");
+  }, []);
+
   const validateFields = () => {
-    if (!name) {
+    setError("");
+    if (!name || !email || !phone) {
+      setError("All fields are required.");
       return false;
     }
-    if (!email) {
-      return false;
-    }
-    if (!phone) {
-      return false;
-    }
+    return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateFields()) {
-      const response = addPatient({ name, email, phone });
-      if (response) {
-        navigation.navigate("Patients");
+      try {
+        await addPatient({ name, email, phone });
+        navigation.navigate("Patients", { refresh: true });
+      } catch (error) {
+        setError("Error adding patient: " + error.message);
       }
-    } else {
-      setError("Error adding patient, some values are missing.");
     }
   };
 

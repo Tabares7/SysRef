@@ -11,13 +11,18 @@ import {
 import { useAuth } from "../context/AuthContext";
 import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useIsFocused,
+} from "@react-navigation/native";
 
 const PatientsScreen = () => {
   const { clinicId, token } = useAuth();
   const { getPatients } = usePatient();
   const [patients, setPatients] = useState([]);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const fetchPatients = useCallback(() => {
     if (clinicId) {
@@ -37,11 +42,11 @@ const PatientsScreen = () => {
     }
   }, [clinicId, getPatients]);
 
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    if (isFocused) {
       fetchPatients();
-    }, [fetchPatients])
-  );
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,9 +59,7 @@ const PatientsScreen = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() =>
-            navigation.navigate("AddPatient", { onAdd: fetchPatients })
-          }
+          onPress={() => navigation.navigate("AddPatient")}
         >
           <Text style={styles.buttonText}>Add New Patient</Text>
         </TouchableOpacity>
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 20,
     padding: 20,
-    backgroundColor: "#f5f5f5", // Fondo claro para mejor contraste
+    backgroundColor: "#f5f5f9", // Fondo claro para mejor contraste
   },
   listContainer: {
     paddingBottom: 20, // Espacio adicional en la parte inferior
