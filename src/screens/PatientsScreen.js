@@ -47,18 +47,20 @@ const PatientsScreen = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={patients}
-        renderItem={({ item }) => <PacienteItem paciente={item} />}
+        renderItem={({ item }) => <PacienteItem patient={item} />}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate("AddPatient", { onAdd: fetchPatients })
-        }
-      >
-        <Text style={styles.buttonText}>Add New Patient</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("AddPatient", { onAdd: fetchPatients })
+          }
+        >
+          <Text style={styles.buttonText}>Add New Patient</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -73,17 +75,21 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingBottom: 20, // Espacio adicional en la parte inferior
   },
-  button: {
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignContent: "center",
     width: "100%",
-    paddingVertical: 15,
-    borderRadius: 5,
+    padding: 10,
+  },
+  button: {
     backgroundColor: "#2d22de",
-    alignItems: "center",
-    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
     fontWeight: "bold",
   },
 });

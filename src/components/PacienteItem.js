@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Card, XStack, YStack, Separator, styled } from "tamagui";
 
-// Estiliza los elementos del paciente
+// Estiliza los elementos del patient
 const StyledCard = styled(Card, {
   padding: "$4",
   backgroundColor: "$background",
@@ -25,29 +25,29 @@ const LabelText = styled(Text, {
   fontSize: 16,
 });
 
-const PacienteItem = ({ paciente }) => {
+const PacienteItem = ({ patient }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("Dashboard");
+        navigation.navigate("PatientDetails", { patient });
       }}
     >
       <StyledCard>
         <YStack padding="$1">
-          <Text style={styles.name}>{paciente.name}</Text>
+          <Text style={styles.name}>{patient.name}</Text>
           <Separator marginVertical={10} />
           <XStack space="$4" marginVertical="$2">
             <LabelText>Email:</LabelText>
-            <InfoText>{paciente.email}</InfoText>
+            <InfoText>{patient.email}</InfoText>
           </XStack>
           <XStack space="$4" marginVertical="$2">
             <LabelText>Phone:</LabelText>
-            <InfoText>{paciente.phone}</InfoText>
+            <InfoText>{patient.phone}</InfoText>
           </XStack>
           <XStack space="$4" marginVertical="$2">
             <LabelText>Code:</LabelText>
-            <InfoText>{paciente.referral_code}</InfoText>
+            <InfoText>{patient.referral_code}</InfoText>
           </XStack>
         </YStack>
       </StyledCard>
