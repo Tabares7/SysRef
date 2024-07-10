@@ -96,7 +96,26 @@ function useReferral() {
     [token]
   );
 
+  const getReferralsByClinicId = useCallback(
+    async (clinicId) => {
+      try {
+        const response = await fetch(`${API_URL}${clinicId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Failed to fetch referrals", error);
+      }
+    },
+    [token]
+  );
+
   return {
+    getReferralsByClinicId,
     createReferral,
     getReferralsByReferrer,
     updateReferral,

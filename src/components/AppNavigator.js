@@ -33,6 +33,10 @@ function TabNavigator() {
             iconName = "home";
           } else if (route.name === "Login") {
             iconName = "user";
+          } else if (route.name === "Profile") {
+            iconName = "user";
+          } else if (route.name === "Config") {
+            iconName = "setting";
           } else if (route.name === "Register") {
             iconName = "adduser";
           } else if (route.name === "Patients") {
@@ -71,6 +75,16 @@ function TabNavigator() {
             name="Patients"
             component={PatientsScreen}
             options={{ title: "Patients" }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={PatientsScreen}
+            options={{ title: "Profile" }}
+          />
+          <Tab.Screen
+            name="Config"
+            component={PatientsScreen}
+            options={{ title: "Config" }}
           />
         </>
       ) : (

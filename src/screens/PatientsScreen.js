@@ -58,7 +58,7 @@ const PatientsScreen = () => {
           contentContainerStyle={styles.listContainer}
         />
       ) : (
-        <View style={styles.empyData}>
+        <View style={styles.emptyData}>
           <Text style={styles.title}>No patients found</Text>
           <Text style={styles.subtitle}>
             Add new patients to start working.
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingBottom: 20, // Espacio adicional en la parte inferior
   },
-  empyData: {
+  emptyData: {
     flex: 1,
     marginTop: 50,
     fontSize: 20,

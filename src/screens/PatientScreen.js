@@ -15,6 +15,7 @@ import useReferral from "../hooks/useReferral";
 import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
 import { useNavigation } from "@react-navigation/native";
+import { PatientItemList } from "../components/PatientItemList";
 
 const PatientScreen = () => {
   const [referrals, setReferrals] = useState([]);
@@ -28,49 +29,59 @@ const PatientScreen = () => {
   const { getPatientById } = usePatient();
 
   useEffect(() => {
-    getReferralsByReferrer(patient.id)
-      .then((data) => {
+    const fetchReferrals = async () => {
+      try {
+        const data = await getReferralsByReferrer(patient.id);
         setReferrals(data.referrals);
-        console.log("Referrals:", data.referrals);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching referrals:", error);
-      });
-  }, []);
+      }
+    };
+
+    setReferrals([]);
+    setReferreds([]);
+    fetchReferrals();
+  }, [patient]);
 
   useEffect(() => {
-    referrals.forEach((referral) => {
-      getPatientById(referral.referred_id)
-        .then((data) => {
-          setReferreds(data.patients);
-          console.log("Referred:", referreds);
-        })
-        .catch((error) => {
-          console.error("Error fetching referred:", error);
-        });
-    });
+    const fetchReferreds = async () => {
+      try {
+        const newReferreds = await Promise.all(
+          referrals.map(async (referral) => {
+            const data = await getPatientById(referral.referred_id);
+            return data.patients[0];
+          })
+        );
+        setReferreds(newReferreds);
+      } catch (error) {
+        console.error("Error fetching referred:", error);
+      }
+    };
+
+    if (referrals.length > 0) {
+      setReferreds([]);
+      fetchReferreds();
+    }
   }, [referrals]);
 
-  // const renderReferredPatient = ({ item }) => (
-  //   <View style={styles.referredCard}>
-  //     <Text style={styles.referredName}>{item.name}</Text>
-  //     <Text style={styles.referredEmail}>{item.email}</Text>
-  //   </View>
-  // );
+  const calcPoints = () => {
+    return referrals.length * 2;
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Image
           source={require("../../assets/profile_placeholder.jpg")}
           style={styles.avatar}
         />
         <Text style={styles.name}>{patient.name}</Text>
+        <Text style={styles.referralCode}>
+          Referral Code:{" "}
+          <Text style={{ fontWeight: "800" }}>{patient.referral_code}</Text>
+        </Text>
         <Text style={styles.email}>{patient.email}</Text>
         <Text style={styles.phone}>{patient.phone}</Text>
-        <Text style={styles.referralCode}>
-          Referral Code: {patient.referral_code}
-        </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -80,11 +91,11 @@ const PatientScreen = () => {
           >
             <Text style={styles.buttonText}>
               <AntDesign name="plus" style={{ padding: 20 }} color="white" />
-              Refer a patient
+              Refer a Patient
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.buttonText}>Use rewards</Text>
+            <Text style={styles.buttonText}>Use Rewards</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.statsContainer}>
@@ -94,35 +105,50 @@ const PatientScreen = () => {
           </View>
           <View style={styles.stat}>
             <Text style={styles.statNumber}>3,648</Text>
-            <Text style={styles.statLabel}>Content</Text>
+            <Text style={styles.statLabel}>Active Points</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statNumber}>3.6m</Text>
-            <Text style={styles.statLabel}>Followers</Text>
+            <Text style={styles.statNumber}>{calcPoints()} pts</Text>
+            <Text style={styles.statLabel}>Points</Text>
           </View>
         </View>
       </View>
-      <View style={styles.body}>
-        <Text style={styles.sectionTitle}>Referred Patients</Text>
-        <Separator marginVertical={10} />
-        <FlatList
-          data={referreds}
-          renderItem={({ item }) => <PacienteItem patient={item} />}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-    </SafeAreaView>
+      {referreds.length > 0 ? (
+        <SafeAreaView style={styles.body}>
+          <Text style={styles.sectionTitle}>Referred Patients</Text>
+          <Separator marginVertical={20} />
+          <FlatList
+            data={referreds}
+            renderItem={({ item }) => <PatientItemList patient={item} />}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContainer}
+          />
+        </SafeAreaView>
+      ) : (
+        // <SafeAreaView style={styles.body}>
+        //   <Text style={styles.sectionTitle}>No Referred Patients </Text>
+        //   <Text>Refer a Patient to get rewards</Text>
+        // </SafeAreaView>
+        <View style={styles.emptyData}>
+          <Text style={styles.title}>No Referred Patients</Text>
+          <Text style={styles.subtitle}>Refer a Patient to get rewards</Text>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 30,
     flex: 1,
     backgroundColor: "#fff",
   },
   header: {
-    padding: 20,
     alignItems: "center",
+  },
+  listContainer: {
+    paddingHorizontal: 10,
   },
   avatar: {
     width: 100,
@@ -130,23 +156,44 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 0,
   },
+  emptyData: {
+    flex: 1,
+    marginTop: 50,
+    fontSize: 20,
+    fontWeight: "bold",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    color: "#3d3d3d",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#2d22de",
+  },
   name: {
-    fontSize: 24,
+    fontSize: 30,
+    fontStyle: "uppercase",
     fontWeight: "bold",
     color: "#2d22de",
   },
   email: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
   },
   phone: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
+
+    marginBottom: 20,
   },
   referralCode: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
-    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -169,12 +216,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
   },
   statsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    marginBottom: 20,
   },
   stat: {
     alignItems: "center",
@@ -188,11 +235,14 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   body: {
-    padding: 20,
+    flex: 1,
   },
   sectionTitle: {
+    alignSelf: "center",
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom: 0,
+    fontWeight: "bold",
+    color: "#2d22de",
   },
   referredCard: {
     backgroundColor: "#f9f9f9",

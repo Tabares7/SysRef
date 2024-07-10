@@ -1,16 +1,33 @@
 // screens/DashboardScreen.js
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { Button } from "tamagui";
-import { StacksDemo } from "../components/StackDemo";
-import ClearCacheButton from "../components/ClearCacheButton";
+import { useNavigation } from "@react-navigation/native";
+import useReferral from "../hooks/useReferral";
 
 const DashboardScreen = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-      <ClearCacheButton />
-    </View>
-  );
+  const [loading, setLoading] = useState(true);
+  const [patients, setPatients] = useState([]);
+  const [error, setError] = useState(null);
+  const [referralsThisMonth, setReferralsThisMonth] = useState([]);
+
+  const { getReferralsByClinicId } = useReferral();
+
+  useEffect(() => {
+    const fetchReferrals = async () => {
+      try {
+        const data = await getReferralsByClinicId();
+        console.log(data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchReferrals();
+  }, []);
+
+  return <View style={styles.container}></View>;
 };
 
 const styles = StyleSheet.create({
