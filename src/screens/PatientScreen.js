@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     marginBottom: 10,
-    color: "#2d22de",
+    color: "#3E5AFA",
   },
   name: {
     fontSize: 30,
     fontStyle: "uppercase",
     fontWeight: "bold",
-    color: "#2d22de",
+    color: "#3E5AFA",
   },
   email: {
     fontSize: 18,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#2d22de",
+    backgroundColor: "#3E5AFA",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 0,
     fontWeight: "bold",
-    color: "#2d22de",
+    color: "#3E5AFA",
   },
   referredCard: {
     backgroundColor: "#f9f9f9",

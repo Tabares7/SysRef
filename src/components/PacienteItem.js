@@ -21,7 +21,7 @@ const InfoText = styled(Text, {
 
 const LabelText = styled(Text, {
   fontWeight: "bold",
-  color: "#2d22de",
+  color: "#3E5AFA",
   fontSize: 16,
 });
 
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#2d22de",
+    color: "#3E5AFA",
   },
 });
 

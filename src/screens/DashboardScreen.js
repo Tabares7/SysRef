@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useReferral from "../hooks/useReferral";
+import useClinic from "../hooks/useClinic";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../context/AuthContext";
+import { RefreshControl } from "react-native";
 
 const DashboardScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
@@ -18,7 +20,9 @@ const DashboardScreen = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [referrals, setReferrals] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const [clinicInfo, setClinicInfo] = useState({});
   const { removeAuthData, token } = useAuth();
+  const { getClinicById } = useClinic();
 
   const { getReferralsByClinicId } = useReferral();
 
@@ -38,6 +42,8 @@ const DashboardScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchReferrals();
+
+    getClinicInfo();
   }, []);
 
   const filterReferralsByMonth = (referrals) => {
@@ -54,6 +60,17 @@ const DashboardScreen = ({ navigation }) => {
     });
   };
 
+  const getClinicInfo = () => {
+    getClinicById()
+      .then((data) => {
+        console.log("Clinic data:", data.clinic);
+        setClinicInfo(data.clinic);
+      })
+      .catch((error) => {
+        console.error("Error fetching clinic:", error);
+      });
+  };
+
   const onRefresh = () => {
     setRefreshing(true);
     fetchReferrals();
@@ -61,18 +78,23 @@ const DashboardScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <Image
             source={require("../../assets/welcome.png")}
             style={styles.avatar}
           />
-          <Text style={styles.title}>Dashboard</Text>
+          <Text>Welcome</Text>
+          <Text style={styles.title}>{clinicInfo.name} </Text>
         </View>
 
         <View style={styles.summaryCard}>
           <Text style={styles.cardTitle}>5 Symptoms of Covid-19</Text>
-          <Text style={styles.cardLink}>Read More...</Text>
         </View>
 
         <View style={styles.chartContainer}>
@@ -91,10 +113,7 @@ const DashboardScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.tabsContainer}>
-          <TouchableOpacity
-            onPress={() => removeAuthData()}
-            style={styles.tabButton}
-          >
+          <TouchableOpacity style={styles.tabButton}>
             <Text style={styles.tabText}>Active Cases</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.tabButton}>
@@ -151,7 +170,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     width: "100%",
     padding: 20,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#FFFBF8",
     borderRadius: 10,
     marginBottom: 20,
     alignItems: "center",
@@ -163,7 +182,7 @@ const styles = StyleSheet.create({
   },
   cardLink: {
     fontSize: 14,
-    color: "#2d22de",
+    color: "#3E5AFA",
     marginTop: 10,
   },
   chartContainer: {
@@ -196,7 +215,7 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     padding: 10,
-    backgroundColor: "#2d22de",
+    backgroundColor: "#3E5AFA",
     borderRadius: 5,
     alignItems: "center",
     flex: 1,
@@ -236,7 +255,7 @@ const styles = StyleSheet.create({
   },
   viewAllButton: {
     padding: 10,
-    backgroundColor: "#2d22de",
+    backgroundColor: "#3E5AFA",
     borderRadius: 5,
     alignItems: "center",
     width: "100%",

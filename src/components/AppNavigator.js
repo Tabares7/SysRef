@@ -27,7 +27,7 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          let iconColor = focused ? "#2d22de" : "#8e8e93";
+          let iconColor = focused ? "#3E5AFA" : "#8e8e93";
           let iconPadding = focused ? 10 : 5;
 
           if (route.name === "Dashboard") {
@@ -53,7 +53,7 @@ function TabNavigator() {
             />
           );
         },
-        tabBarActiveTintColor: "#2d22de",
+        tabBarActiveTintColor: "#3E5AFA",
         tabBarInactiveTintColor: "#8e8e93",
         tabBarStyle: {
           height: 100,

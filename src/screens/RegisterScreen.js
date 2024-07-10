@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
     borderRadius: 5,
-    backgroundColor: "#2d22de",
+    backgroundColor: "#3E5AFA",
     alignItems: "center",
   },
   buttonText: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     marginTop: 20,
-    color: "#2d22de",
+    color: "#3E5AFA",
   },
 });
 
