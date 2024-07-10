@@ -94,7 +94,11 @@ const DashboardScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.summaryCard}>
-          <Text style={styles.cardTitle}>5 Symptoms of Covid-19</Text>
+          <Text style={styles.cardTitle}> {referrals} Referral/s</Text>
+          <Text style={styles.chartSubtitle}>
+            That means {referrals} new patient/s thanks to your patient
+            networking.
+          </Text>
         </View>
 
         <View style={styles.chartContainer}>
@@ -112,7 +116,7 @@ const DashboardScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={styles.tabsContainer}>
+        {/* <View style={styles.tabsContainer}>
           <TouchableOpacity style={styles.tabButton}>
             <Text style={styles.tabText}>Active Cases</Text>
           </TouchableOpacity>
@@ -122,7 +126,7 @@ const DashboardScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.tabButton}>
             <Text style={styles.tabText}>Recovered</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.topCountryContainer}>
           <View style={styles.countryCard}>
@@ -170,9 +174,10 @@ const styles = StyleSheet.create({
   summaryCard: {
     width: "100%",
     padding: 20,
-    backgroundColor: "#FFFBF8",
+    backgroundColor: "#EFE5DF",
     borderRadius: 10,
     marginBottom: 20,
+    textAlign: "center",
     alignItems: "center",
   },
   cardTitle: {
@@ -193,10 +198,12 @@ const styles = StyleSheet.create({
   },
   chart: {
     width: "30%",
+    height: 100,
     padding: 10,
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "center",
   },
   chartTitle: {
     fontSize: 18,
@@ -233,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   countryCard: {
-    width: "45%",
+    width: "47%",
     padding: 10,
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
