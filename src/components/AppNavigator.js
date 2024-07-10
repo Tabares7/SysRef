@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext"; // Importa el contexto de aute
 import AddPatientScreen from "../screens/AddPatientScreen";
 import PatientScreen from "../screens/PatientScreen";
 import AddReferredScreen from "../screens/AddReferredScreen";
+import { ConfigScreen } from "../screens/ConfigScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -83,7 +84,7 @@ function TabNavigator() {
           />
           <Tab.Screen
             name="Config"
-            component={PatientsScreen}
+            component={ConfigScreen}
             options={{ title: "Config" }}
           />
         </>

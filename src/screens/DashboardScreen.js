@@ -16,7 +16,7 @@ const DashboardScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [error, setError] = useState(null);
-  const [referralsThisMonth, setReferralsThisMonth] = useState(0);
+  const [referrals, setReferrals] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const { removeAuthData, token } = useAuth();
 
@@ -26,7 +26,7 @@ const DashboardScreen = ({ navigation }) => {
     try {
       const data = await getReferralsByClinicId();
       const filteredReferrals = filterReferralsByMonth(data.referrals);
-      setReferralsThisMonth(filteredReferrals.length);
+      setReferrals(filteredReferrals.length);
       setLoading(false);
       setRefreshing(false);
     } catch (error) {
@@ -38,7 +38,6 @@ const DashboardScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchReferrals();
-    console.log("token:", token);
   }, []);
 
   const filterReferralsByMonth = (referrals) => {
