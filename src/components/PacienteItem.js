@@ -1,62 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Card, XStack, YStack, Separator, styled } from "tamagui";
-
-// Estiliza los elementos del patient
-const StyledCard = styled(Card, {
-  padding: "$4",
-  backgroundColor: "$background",
-  shadow: "$4",
-  borderRadius: "$4",
-  marginBottom: "$4",
-  borderWidth: 1,
-  borderColor: "#ddd",
-});
-
-const InfoText = styled(Text, {
-  color: "#555",
-  fontSize: 16,
-});
-
-const LabelText = styled(Text, {
-  fontWeight: "bold",
-  color: "#3E5AFA",
-  fontSize: 16,
-});
+import useReferral from "../hooks/useReferral";
 
 const PacienteItem = ({ patient }) => {
   const navigation = useNavigation();
+  const { getReferralsByReferrer } = useReferral();
+  const [referrals, setReferrals] = useState([]);
+
+  useEffect(() => {
+    const fetchReferrals = async () => {
+      try {
+        const data = await getReferralsByReferrer(patient.id);
+        setReferrals(data.referrals);
+      } catch (error) {
+        console.error("Error fetching referrals:", error);
+      }
+    };
+
+    setReferrals([]);
+    fetchReferrals();
+  }, [patient]);
+
   return (
     <TouchableOpacity
+      style={styles.cardCard}
       onPress={() => {
-        navigation.navigate("PatientDetails", { patient });
+        navigation.navigate("PatientDetails", {
+          patient,
+          refresh: true,
+        });
       }}
     >
-      <StyledCard style={styles.container}>
-        <YStack padding="$1">
-          <Text style={styles.name}>{patient.name}</Text>
-          <Separator marginVertical={10} />
-          <XStack space="$4" marginVertical="$2">
-            <LabelText>Email:</LabelText>
-            <InfoText>{patient.email}</InfoText>
-          </XStack>
-          <XStack space="$4" marginVertical="$2">
-            <LabelText>Phone:</LabelText>
-            <InfoText>{patient.phone}</InfoText>
-          </XStack>
-          <XStack space="$4" marginVertical="$2">
-            <LabelText>Code:</LabelText>
-            <InfoText>{patient.referral_code}</InfoText>
-          </XStack>
-        </YStack>
-      </StyledCard>
+      <View>
+        <Text style={styles.cardName}>{patient.name}</Text>
+        <Text style={styles.cardEmail}>{patient.email}</Text>
+        <Text style={styles.cardPhone}>{patient.phone}</Text>
+      </View>
+      <View style={styles.cardQuantityCOntainer}>
+        <Text style={styles.cardsQuantity}>{referrals.length}</Text>
+        <Text style={styles.cardEmail}>Referreds</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  cardCard: {
+    height: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    paddingHorizontal: 20,
+    paddingRight: 30,
+    margin: 10,
+    backgroundColor: "#577CF0",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -64,10 +63,31 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  name: {
+  cardName: {
+    color: "#fff",
+
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  cardEmail: {
+    color: "#fff",
+
+    fontSize: 16,
+  },
+  cardPhone: {
+    color: "#fff",
+
+    fontSize: 16,
+  },
+  cardsQuantity: {
+    color: "#fff",
+
     fontSize: 30,
     fontWeight: "bold",
-    color: "#3E5AFA",
+  },
+  cardQuantityCOntainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
