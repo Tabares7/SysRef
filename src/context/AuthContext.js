@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.removeItem("clinicId");
       setToken(null);
       setClinicId(null);
+      console.log("Auth data removed");
     } catch (error) {
       console.error("Error removing auth data", error);
     }

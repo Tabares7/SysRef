@@ -7,10 +7,12 @@ import {
   SafeAreaView,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import usePatient from "../hooks/usePatient";
 import PacienteItem from "../components/PacienteItem";
+
 import {
   useNavigation,
   useFocusEffect,
@@ -23,6 +25,7 @@ const PatientsScreen = () => {
   const [patients, setPatients] = useState([]);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchPatients = useCallback(() => {
     if (clinicId) {
@@ -48,6 +51,10 @@ const PatientsScreen = () => {
     }
   }, [isFocused]);
 
+  const onRefresh = () => {
+    fetchPatients();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {patients.length > 0 ? (
@@ -56,6 +63,9 @@ const PatientsScreen = () => {
           renderItem={({ item }) => <PacienteItem patient={item} />}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       ) : (
         <View style={styles.emptyData}>
