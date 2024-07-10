@@ -9,16 +9,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
-    const loadAuthData = async () => {
+    const loadAuthToken = async () => {
       try {
         const storedToken = await AsyncStorage.getItem("authToken");
-        const storedClinicId = await AsyncStorage.getItem("clinicId");
         if (storedToken) {
           setToken(storedToken);
         }
+      } catch (error) {
+        console.error("Error loading auth token", error);
+      }
+    };
+
+    const loadClinicId = async () => {
+      try {
+        const storedClinicId = await AsyncStorage.getItem("clinicId");
         if (storedClinicId) {
           setClinicId(storedClinicId);
         }
+      } catch (error) {
+        console.error("Error loading clinic ID", error);
+      }
+    };
+
+    const loadAuthData = async () => {
+      try {
+        await loadAuthToken();
+        await loadClinicId();
       } catch (error) {
         console.error("Error loading auth data", error);
       } finally {

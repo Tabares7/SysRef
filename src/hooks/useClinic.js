@@ -6,6 +6,10 @@ function useClinic() {
   const { token, clinicId } = useAuth();
 
   const getClinicById = useCallback(async () => {
+    if (!token || !clinicId) {
+      throw new Error("No token or clinic ID found");
+    }
+
     try {
       const response = await fetch(`${API_URL}clinics/${clinicId}`, {
         method: "GET",
@@ -23,10 +27,11 @@ function useClinic() {
       console.error("Error fetching clinic:", error);
       throw error;
     }
-  }, []);
+  }, [token, clinicId]);
 
   return {
     getClinicById,
   };
 }
+
 export default useClinic;

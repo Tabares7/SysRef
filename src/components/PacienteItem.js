@@ -33,7 +33,7 @@ const PacienteItem = ({ patient }) => {
         navigation.navigate("PatientDetails", { patient });
       }}
     >
-      <StyledCard>
+      <StyledCard style={styles.container}>
         <YStack padding="$1">
           <Text style={styles.name}>{patient.name}</Text>
           <Separator marginVertical={10} />
@@ -56,6 +56,14 @@ const PacienteItem = ({ patient }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
   name: {
     fontSize: 30,
     fontWeight: "bold",

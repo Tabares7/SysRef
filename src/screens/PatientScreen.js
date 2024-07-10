@@ -219,6 +219,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   statsContainer: {
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",

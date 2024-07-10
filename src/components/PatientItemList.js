@@ -35,8 +35,12 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     margin: 10,
     backgroundColor: "#577CF0",
-    shadowColor: "#000",
     borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
   referredName: {
     color: "#fff",
